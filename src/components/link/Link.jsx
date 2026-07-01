@@ -2,7 +2,7 @@ import styles from "./link.module.css";
 
 function Link() {
   return (
-    <a href="https://github.com/gabrielatwell1987/react_todo">
+    <a href="https://github.com/gabeatwell/react_todo">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 496 512"
