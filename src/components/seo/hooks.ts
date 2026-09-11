@@ -4,7 +4,18 @@ import { useEffect } from "react";
  * Custom hook for managing SEO meta tags
  * Use this hook when you need more control over when SEO updates happen
  */
-export const useSEO = (seoConfig) => {
+interface SEOConfig {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  image?: string;
+  url?: string;
+  type?: string;
+  siteName?: string;
+  canonicalUrl?: string | null;
+}
+
+export const useSEO = (seoConfig: SEOConfig) => {
   useEffect(() => {
     const {
       title,
@@ -23,7 +34,11 @@ export const useSEO = (seoConfig) => {
     }
 
     // Helper function to update meta tags
-    const updateMetaTag = (property, content, isProperty = false) => {
+    const updateMetaTag = (
+      property: string,
+      content: string | undefined,
+      isProperty = false,
+    ) => {
       if (!content) return;
 
       const attribute = isProperty ? "property" : "name";
@@ -38,7 +53,7 @@ export const useSEO = (seoConfig) => {
       meta.setAttribute("content", content);
     };
 
-    const updateLinkTag = (rel, href) => {
+    const updateLinkTag = (rel: string, href: string | undefined) => {
       if (!href) return;
 
       let link = document.querySelector(`link[rel="${rel}"]`);
@@ -71,11 +86,14 @@ export const useSEO = (seoConfig) => {
 /**
  * Hook for managing structured data
  */
-export const useStructuredData = (structuredData, id = "structured-data") => {
+export const useStructuredData = (
+  structuredData: Record<string, unknown> | null | undefined,
+  id = "structured-data",
+) => {
   useEffect(() => {
     if (!structuredData) return;
 
-    let script = document.querySelector(`#${id}`);
+    let script = document.querySelector<HTMLScriptElement>(`#${id}`);
     if (!script) {
       script = document.createElement("script");
       script.id = id;

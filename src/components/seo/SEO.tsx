@@ -1,5 +1,22 @@
 import { useEffect } from "react";
-import PropTypes from "prop-types";
+
+interface SEOProps {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  author?: string;
+  image?: string;
+  url?: string;
+  type?: string;
+  siteName?: string;
+  twitterCard?: string;
+  twitterSite?: string;
+  locale?: string;
+  canonicalUrl?: string | null;
+  noindex?: boolean;
+  nofollow?: boolean;
+  structuredData?: Record<string, unknown> | null;
+}
 
 const SEO = ({
   title = "Groceries App - Smart Shopping List Manager",
@@ -17,10 +34,10 @@ const SEO = ({
   noindex = false,
   nofollow = false,
   structuredData = null,
-}) => {
+}: SEOProps) => {
   useEffect(() => {
     // Default structured data
-    const defaultStructuredData = {
+    const defaultStructuredData: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": "WebApplication",
       name: siteName,
@@ -39,13 +56,13 @@ const SEO = ({
     document.title = title;
 
     // Helper function to safely create absolute URLs
-    const createAbsoluteUrl = (path) => {
+    const createAbsoluteUrl = (path: string) => {
       if (!path) return "";
       if (path.startsWith("http")) return path;
       if (typeof window !== "undefined") {
         try {
           return new URL(path, window.location.origin).href;
-        } catch (error) {
+        } catch {
           console.warn("Invalid URL:", path);
           return "";
         }
@@ -54,22 +71,27 @@ const SEO = ({
     };
 
     // Create or update meta tags
-    const updateMetaTag = (property, content, isProperty = false) => {
+    const updateMetaTag = (
+      property: string,
+      content: string | undefined,
+      isProperty = false,
+    ) => {
       if (!content) return;
 
       const attribute = isProperty ? "property" : "name";
-      let meta = document.querySelector(`meta[${attribute}="${property}"]`);
+      const meta = document.querySelector(`meta[${attribute}="${property}"]`);
 
       if (!meta) {
-        meta = document.createElement("meta");
-        meta.setAttribute(attribute, property);
-        document.head.appendChild(meta);
+        const newMeta = document.createElement("meta");
+        newMeta.setAttribute(attribute, property);
+        newMeta.setAttribute("content", content);
+        document.head.appendChild(newMeta);
+      } else {
+        meta.setAttribute("content", content);
       }
-
-      meta.setAttribute("content", content);
     };
 
-    const updateLinkTag = (rel, href) => {
+    const updateLinkTag = (rel: string, href: string | undefined) => {
       if (!href) return;
 
       // Remove existing link tags of the same rel to avoid duplicates
@@ -89,7 +111,7 @@ const SEO = ({
     updateMetaTag("viewport", "width=device-width, initial-scale=1.0");
     updateMetaTag(
       "robots",
-      `${noindex ? "noindex" : "index"},${nofollow ? "nofollow" : "follow"}`
+      `${noindex ? "noindex" : "index"},${nofollow ? "nofollow" : "follow"}`,
     );
 
     // Open Graph meta tags
@@ -122,7 +144,8 @@ const SEO = ({
     // Structured Data (JSON-LD)
     const finalStructuredData = structuredData || defaultStructuredData;
     if (finalStructuredData) {
-      let script = document.querySelector("#structured-data");
+      let script =
+        document.querySelector<HTMLScriptElement>("#structured-data");
       if (!script) {
         script = document.createElement("script");
         script.id = "structured-data";
@@ -150,24 +173,6 @@ const SEO = ({
   ]);
 
   return null;
-};
-
-SEO.propTypes = {
-  title: PropTypes.string,
-  description: PropTypes.string,
-  keywords: PropTypes.string,
-  author: PropTypes.string,
-  image: PropTypes.string,
-  url: PropTypes.string,
-  type: PropTypes.string,
-  siteName: PropTypes.string,
-  twitterCard: PropTypes.string,
-  twitterSite: PropTypes.string,
-  locale: PropTypes.string,
-  canonicalUrl: PropTypes.string,
-  noindex: PropTypes.bool,
-  nofollow: PropTypes.bool,
-  structuredData: PropTypes.object,
 };
 
 export default SEO;

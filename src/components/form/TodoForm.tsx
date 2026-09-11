@@ -1,13 +1,17 @@
 import { useState } from "react";
-import styles from "./edittodoform.module.css";
+import styles from "./todoform.module.css";
 
-function EditTodoForm({ editTodo, task }) {
-  const [value, setValue] = useState(task.task);
+interface TodoFormProps {
+  addTodo: (todo: string) => void;
+}
 
-  const handleSubmit = (e) => {
+function TodoForm({ addTodo }: TodoFormProps) {
+  const [value, setValue] = useState("");
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    editTodo(value, task.id);
+    addTodo(value);
 
     setValue("");
   };
@@ -17,16 +21,16 @@ function EditTodoForm({ editTodo, task }) {
       <input
         type="text"
         className={styles.TodoInput}
-        placeholder="Update task"
+        placeholder="What is your grocery item?"
         onChange={(e) => setValue(e.target.value)}
         value={value}
       />
 
       <button type="submit" className={styles.TodoBtn}>
-        Update Item
+        Add Item
       </button>
     </form>
   );
 }
 
-export default EditTodoForm;
+export default TodoForm;

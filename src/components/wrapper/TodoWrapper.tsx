@@ -8,13 +8,20 @@ import styles from "./todowrapper.module.css";
 uuidv4();
 
 function TodoWrapper() {
-  const [todos, setTodos] = useState([]);
+  interface TodoItem {
+    id: string;
+    task: string;
+    completed: boolean;
+    isEditing: boolean;
+  }
 
-  const persistData = (newList) => {
+  const [todos, setTodos] = useState<TodoItem[]>([]);
+
+  const persistData = (newList: TodoItem[]) => {
     localStorage.setItem("todos", JSON.stringify({ todos: newList }));
   };
 
-  const addTodo = (todo) => {
+  const addTodo = (todo: string) => {
     persistData([
       ...todos,
       { id: uuidv4(), task: todo, completed: false, isEditing: false },
@@ -26,31 +33,31 @@ function TodoWrapper() {
     ]);
   };
 
-  const toggleComplete = (id) => {
+  const toggleComplete = (id: string) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
     );
   };
 
-  const deleteTodo = (id) => {
+  const deleteTodo = (id: string) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const editTodo = (id) => {
+  const editTodo = (id: string) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
-      )
+        todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo,
+      ),
     );
   };
 
-  const editTask = (task, id) => {
+  const editTask = (task: string, id: string) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, task, isEditing: !todo.isEditing } : todo
-      )
+        todo.id === id ? { ...todo, task, isEditing: !todo.isEditing } : todo,
+      ),
     );
   };
 
@@ -61,8 +68,8 @@ function TodoWrapper() {
     if (!localTodos) {
       return;
     }
-    localTodos = JSON.parse(localTodos).todos;
-    setTodos(localTodos);
+    const parsed = JSON.parse(localTodos);
+    setTodos(parsed.todos ?? []);
   }, []);
 
   return (
@@ -84,7 +91,7 @@ function TodoWrapper() {
             deleteTodo={deleteTodo}
             editTodo={editTodo}
           />
-        )
+        ),
       )}
     </div>
   );

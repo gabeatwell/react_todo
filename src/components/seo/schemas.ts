@@ -11,11 +11,7 @@ export const organizationSchema = {
   description: "Smart shopping list manager for organizing groceries",
   url: window.location?.origin || "",
   logo: `${window.location?.origin || ""}/groceries.webp`,
-  sameAs: [
-    // Add your social media profiles here
-    // "https://twitter.com/groceriesapp",
-    // "https://facebook.com/groceriesapp"
-  ],
+  sameAs: [] as string[],
 };
 
 // WebApplication schema
@@ -44,7 +40,12 @@ export const webApplicationSchema = {
 };
 
 // Breadcrumb schema generator
-export const generateBreadcrumbSchema = (breadcrumbs) => ({
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+export const generateBreadcrumbSchema = (breadcrumbs: BreadcrumbItem[]) => ({
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: breadcrumbs.map((item, index) => ({
@@ -56,7 +57,12 @@ export const generateBreadcrumbSchema = (breadcrumbs) => ({
 });
 
 // FAQ schema generator
-export const generateFAQSchema = (faqs) => ({
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export const generateFAQSchema = (faqs: FAQItem[]) => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: faqs.map((faq) => ({
@@ -70,7 +76,16 @@ export const generateFAQSchema = (faqs) => ({
 });
 
 // Article schema generator
-export const generateArticleSchema = (article) => ({
+interface Article {
+  title: string;
+  description: string;
+  image?: string;
+  author?: string;
+  datePublished: string;
+  dateModified?: string;
+}
+
+export const generateArticleSchema = (article: Article) => ({
   "@context": "https://schema.org",
   "@type": "Article",
   headline: article.title,
@@ -93,7 +108,22 @@ export const generateArticleSchema = (article) => ({
 });
 
 // How-to schema generator
-export const generateHowToSchema = (howTo) => ({
+interface HowToStep {
+  name: string;
+  description: string;
+  image?: string;
+}
+
+interface HowTo {
+  name: string;
+  description: string;
+  image?: string;
+  totalTime?: string;
+  supplies?: string[];
+  steps?: HowToStep[];
+}
+
+export const generateHowToSchema = (howTo: HowTo) => ({
   "@context": "https://schema.org",
   "@type": "HowTo",
   name: howTo.name,
