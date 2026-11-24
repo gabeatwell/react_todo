@@ -109,6 +109,5 @@ State changes are persisted to `localStorage` under the key `"todos"`. On mount,
 
 The `SEO` component dynamically injects meta tags and JSON-LD structured data into the document head at runtime, making the app crawlable and social-share friendly.
 
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
+Author: [Gabe Atwell](https://github.com/gabeatwell)
+Portfolio: [atwell.dev](https://atwell.dev/)
