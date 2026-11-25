@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Update the domain once this app is deployed.
